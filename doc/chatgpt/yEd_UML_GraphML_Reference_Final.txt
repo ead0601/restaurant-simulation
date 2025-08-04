@@ -1,0 +1,121 @@
+
+# Updated yEd UML GraphML Encoding Reference (Final)
+
+This reference defines the standards for generating UML-compatible GraphML for yEd based on the integrated Probability and ProcessDecode model.
+
+---
+
+## 1. Namespace Handling
+
+yEd UML GraphML must include:
+
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:y="http://www.yworks.com/xml/graphml"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+
+### Parsing and Editing:
+- Use **`lxml.etree`** (not ElementTree) to preserve namespaces.
+- Define prefixes:
+  - `g:` → GraphML core
+  - `y:` → yEd UML elements
+  - `xsi:` → XML Schema Instance
+
+---
+
+## 2. UML ClassNode Structure
+
+Each class is defined as:
+
+<node id="n0">
+  <data key="d0">
+    <y:UMLClassNode>
+      <y:Geometry height="160.0" width="220.0" x="X" y="Y"/>
+      <y:Fill color="#COLOR_HEX" transparent="false"/>
+      <y:BorderStyle color="#000000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" fontFamily="Dialog" fontSize="12" fontStyle="bold">Class Name</y:NodeLabel>
+      <y:UML clipContent="true" omitDetails="false" stereotype="«Stereotype»" constraint="{constraint text}">
+        <y:AttributeLabel>- attr: Type\n- attr: Type</y:AttributeLabel>
+        <y:MethodLabel>+ method()\n+ decideX()</y:MethodLabel>
+      </y:UML>
+    </y:UMLClassNode>
+  </data>
+</node>
+
+---
+
+## 3. Decision Integration
+
+- Each operational object includes **`decideX()`** methods (e.g., `decideSeating()`, `decideNextOrder()`).
+- These call **`ProcessDecode.mainDecisionRoutine(context)`**, delegating logic to a centralized decision engine.
+- **ProcessDecode** UML node:
+  - Attributes: `decisionRules: Map<String,String>`, `thresholds: Map<String,Double>`, `contextData: Map<String,Object>`
+  - Methods: 
+    - `+ mainDecisionRoutine(context: Object): Decision`
+    - `+ decodeSeating()`, `+ decodeCooking()`, `+ decodeServing()`, `+ decodeExit()`, `+ decodeRestock()`, `+ decodeStaffing()`
+
+---
+
+## 4. Probability Integration
+
+- **Probability class stores grouped maps** rather than individual attributes:
+  - `# customerProbabilities: Map<String,Double>`
+  - `# menuKitchenProbabilities: Map<String,Double>`
+  - `# staffServiceProbabilities: Map<String,Double>`
+  - `# environmentalProbabilities: Map<String,Double>`
+  - `# simulationProbabilities: Map<String,Double>`
+
+- Methods:
+  - `+ getProbability(category,event): double`
+  - `+ sampleProbability(category,event): double`
+  - `+ adjustProbability(category,event,delta): void`
+  - `+ evaluateOutcome(category,event): boolean`
+
+- Other class decision methods reference Probability internally (not drawn with UML associations to keep diagrams uncluttered).
+
+---
+
+## 5. Utility Classes
+
+- **Probability** and **ProcessDecode** are UMLClassNodes placed unconnected visually but serve as global services.
+- Other objects call their methods for stochastic or decision logic.
+
+---
+
+## 6. Edge (Connection) Structure
+
+Connections between classes follow:
+<edge id="e0" source="n0" target="n1">
+  <data key="d1">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#000000" type="line" width="1.0"/>
+      <y:EdgeLabel alignment="center" fontFamily="Dialog" fontSize="12" modelName="centered"
+                   preferredPlacement="center_on_edge">⭕ 1-2</y:EdgeLabel>
+      <y:Arrows source="none" target="standard"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+
+---
+
+## 7. Color Coding by Stereotype
+
+- Roles: **Light Green (#CCFFCC)**
+- Entities: **Light Blue (#CCE5FF)**
+- Devices: **Light Gray (#E0E0E0)**
+- Menu/Resource: **Light Yellow (#FFFFCC)**
+- Utilities: **Light Orange (#FFD9B3)**
+- Actors: **Light Pink (#FFCCE5)**
+
+---
+
+## 8. Summary Workflow
+
+1. Parse existing GraphML using lxml with namespaces.
+2. Modify UMLClassNodes and Edge structures as needed.
+3. Apply decision hooks to all operational classes.
+4. Keep Probability and ProcessDecode global and unconnected visually.
+5. Save with XML declaration and namespace integrity.
+
+This ensures generated UML is **yEd-compatible** and fully aligned with our simulation architecture.
+
