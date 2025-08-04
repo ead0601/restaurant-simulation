@@ -91,10 +91,10 @@ Time 2: [Clock: tickCounter=2] [Restaurant: tickCounter=2] ...
 ---
 
 ## 📄 License
-This project is released under the MIT License. See `LICENSE` for details.
+This project is released under the GPLv3 License. See `LICENSE` for details.
 
 ---
 
 ## 👤 Author
 - **Your Name Here**  
-  - GitHub: [yourusername](https://github.com/yourusername)
+  - GitHub: [ead0601](https://github.com/ead0601)
