@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
   <!--Created by yEd 3.25.1-->
   <key for="port" id="d0" yfiles.type="portgraphics"/>
@@ -19,7 +19,7 @@
           <y:Fill color="#CCE5FF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="b" textColor="#000000" verticalTextPosition="bottom" visible="true" width="96.279296875" x="159.9423828125" xml:space="preserve" y="25.96875">1. Restaurant</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{manages operations}" hasDetailsColor="false" omitDetails="false" stereotype="«Entity»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{manages operations}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- name: String
 - tables: List&lt;Table&gt;
 - menu: List&lt;Platter&gt;
@@ -50,7 +50,7 @@ decideInventoryRestock (uses Probability: IngredientSpoilageRate)
           <y:Fill color="#CCFFCC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="tr" textColor="#000000" verticalTextPosition="bottom" visible="true" width="74.67578125" x="170.4130859375" xml:space="preserve" y="25.96875">2. Hostess</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{assigns tables}" hasDetailsColor="false" omitDetails="false" stereotype="«Role»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{assigns tables}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- name: String</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ greetCustomer(Customer)
 + seatCustomer(Customer, Table)
@@ -74,7 +74,7 @@ decideQueueOrder (uses Probability: QueueBalkingProbability)
           <y:Fill color="#E0E0E0" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="tr" textColor="#000000" verticalTextPosition="bottom" visible="true" width="110.693359375" x="171.28125" xml:space="preserve" y="4.0">3. CashRegister</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{tracks revenue}" hasDetailsColor="false" omitDetails="false" stereotype="«Device»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{tracks revenue}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- totalStoreIncome: double
 - totalTips: double</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ processPayment(Server, Order, double tip)
@@ -94,7 +94,7 @@ decideQueueOrder (uses Probability: QueueBalkingProbability)
           <y:Fill color="#CCE5FF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="bl" textColor="#000000" verticalTextPosition="bottom" visible="true" width="58.2109375" x="67.0068359375" xml:space="preserve" y="25.96875">4. Table</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{seating location}" hasDetailsColor="false" omitDetails="false" stereotype="«Entity»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{seating location}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- id: int
 - capacity: int
 - location: String
@@ -116,7 +116,7 @@ decideQueueOrder (uses Probability: QueueBalkingProbability)
           <y:Fill color="#FFFFCC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="tl" textColor="#000000" verticalTextPosition="bottom" visible="true" width="67.62109375" x="4.0" xml:space="preserve" y="4.0">5. Platter</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{cookable item}" hasDetailsColor="false" omitDetails="false" stereotype="«Menu Item»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{cookable item}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- name: String
 - ingredients: List&lt;Ingredient&gt;
 - cookingTime: int
@@ -136,7 +136,7 @@ decideQueueOrder (uses Probability: QueueBalkingProbability)
           <y:Fill color="#FFFFCC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="tl" textColor="#000000" verticalTextPosition="bottom" visible="true" width="91.861328125" x="4.0" xml:space="preserve" y="4.0">6. Ingredient</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{perishable goods}" hasDetailsColor="false" omitDetails="false" stereotype="«Resource»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{perishable goods}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- name: String
 - quantity: double
 - costPerUnit: double
@@ -155,7 +155,7 @@ decideQueueOrder (uses Probability: QueueBalkingProbability)
           <y:Fill color="#CCFFCC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="br" textColor="#000000" verticalTextPosition="bottom" visible="true" width="54.361328125" x="159.0341796875" xml:space="preserve" y="25.96875">7. Cook</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{kitchen staff}" hasDetailsColor="false" omitDetails="false" stereotype="«Role»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{kitchen staff}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- name: String
 - skillLevel: int</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ cook(Platter)
@@ -179,7 +179,7 @@ decideCookingPriority (uses Probability: CookingDelayRate)
           <y:Fill color="#CCFFCC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="b" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.6640625" x="172.525390625" xml:space="preserve" y="25.96875">8. Server</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{floor staff}" hasDetailsColor="false" omitDetails="false" stereotype="«Role»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{floor staff}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- name: String
 - tablesAssigned: List&lt;Table&gt;</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ serve(Table)
@@ -204,7 +204,7 @@ decideTipHandling (uses Probability: TipLikelihood)
           <y:Fill color="#CCE5FF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="102.7890625" x="46.34375" xml:space="preserve" y="25.96875">9. ServerTable</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{pickup counter}" hasDetailsColor="false" omitDetails="false" stereotype="«Entity»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{pickup counter}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- bell: boolean
 - orderQueue: Queue&lt;Order&gt;</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ announceOrder(Order)
@@ -224,7 +224,7 @@ decideTipHandling (uses Probability: TipLikelihood)
           <y:Fill color="#CCE5FF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="68.201171875" x="75.67578125" xml:space="preserve" y="25.96875">10. Order</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{food request}" hasDetailsColor="false" omitDetails="false" stereotype="«Entity»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{food request}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- platter: Platter
 - table: Table
 - timePlaced: int</y:AttributeLabel>
@@ -245,7 +245,7 @@ decideTipHandling (uses Probability: TipLikelihood)
           <y:Fill color="#FFCCE5" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="tr" textColor="#000000" verticalTextPosition="bottom" visible="true" width="94.46875" x="116.2490234375" xml:space="preserve" y="25.96875">11. Customer</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{dining patron}" hasDetailsColor="false" omitDetails="false" stereotype="«Actor»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{dining patron}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- groupSize: int
 - patience: int
 - satisfaction: int
@@ -271,7 +271,7 @@ decideReorder (uses Probability: ReorderLikelihood)
           <y:Fill color="#FFFFCC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="br" textColor="#000000" verticalTextPosition="bottom" visible="true" width="94.66796875" x="52.9560546875" xml:space="preserve" y="25.96875">12. Inventory</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{stock control}" hasDetailsColor="false" omitDetails="false" stereotype="«Resource»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{stock control}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- ingredients: List&lt;Ingredient&gt;</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ restock()
 + checkStock(Platter)
@@ -290,7 +290,7 @@ decideReorder (uses Probability: ReorderLikelihood)
           <y:Fill color="#E0E0E0" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="tl" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.708984375" x="4.0" xml:space="preserve" y="4.0">13. Refrigerator</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{cold storage}" hasDetailsColor="false" omitDetails="false" stereotype="«Device»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{cold storage}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- capacity: double</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ store(Ingredient)
 + remove(Ingredient)
@@ -308,7 +308,7 @@ decideReorder (uses Probability: ReorderLikelihood)
           <y:Fill color="#E0E0E0" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="tl" textColor="#000000" verticalTextPosition="bottom" visible="true" width="68.01953125" x="4.0" xml:space="preserve" y="4.0">14. Stove</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{hot line}" hasDetailsColor="false" omitDetails="false" stereotype="«Device»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{hot line}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- slots: int</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ startCooking(Platter)
 + finishCooking(Platter)
@@ -326,7 +326,7 @@ decideReorder (uses Probability: ReorderLikelihood)
           <y:Fill color="#CCE5FF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="bl" textColor="#000000" verticalTextPosition="bottom" visible="true" width="82.181640625" x="49.70703125" xml:space="preserve" y="25.96875">15. Finance</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{tracks profit}" hasDetailsColor="false" omitDetails="false" stereotype="«Entity»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{tracks profit}" hasDetailsColor="false" omitDetails="false" stereotype="«inherits SimEntity»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve">- fixedCosts: double
 - laborCosts: double</y:AttributeLabel>
             <y:MethodLabel xml:space="preserve">+ calculateNetRevenue()
@@ -412,10 +412,21 @@ decideReorder (uses Probability: ReorderLikelihood)
           <y:Fill color="#FFD9B3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="br" textColor="#000000" verticalTextPosition="bottom" visible="true" width="157.2578125" x="184.642578125" xml:space="preserve" y="25.96875">19. HeartbeatManager</y:NodeLabel>
-          <y:UML clipContent="true" constraint="{drives simulation clk}" hasDetailsColor="false" omitDetails="false" stereotype="«Utility»" use3DEffect="true">
+          <y:UML clipContent="true" constraint="{drives simulation clk}" hasDetailsColor="false" omitDetails="false" stereotype="«Simulation Kernel with Console &amp; Waveform»" use3DEffect="true">
             <y:AttributeLabel xml:space="preserve"># processes: List&lt;SimProcess&gt;</y:AttributeLabel>
-            <y:MethodLabel xml:space="preserve">+ runDebug(ticks: int): void (Runs heartbeat in debug mode with waveform logging.)
-+ tickle(): void (Single-step tick for interactive waveform debugging.)</y:MethodLabel>
+            <y:MethodLabel xml:space="preserve">+ registerProcess(SimProcess)
++ run(int): void
++ stepOnce(): void
++ getClock(): SimulationClock
++ getProcesses(): List&lt;SimProcess&gt;
++ startConsole(): void
++ listObjects(): void
++ showObject(String): void
++ setValue(String, String, String): void
++ startLogging(String): void
++ stopLogging(): void
++ logTick(int): void
++ displayStates(): void</y:MethodLabel>
           </y:UML>
         </y:UMLClassNode>
       </data>
@@ -1051,7 +1062,7 @@ decideReorder (uses Probability: ReorderLikelihood)
         </y:PolyLineEdge>
       </data>
     </edge>
-  </graph>
+  <edge id="e_Restaurant_HB" source="n0" target="n18"><data key="d1"><y:PolyLineEdge><y:LineStyle color="#000000" type="line" width="1.0"/><y:EdgeLabel alignment="center" fontFamily="Dialog" fontSize="12" modelName="centered" preferredPlacement="center_on_edge">◼ composition</y:EdgeLabel><y:Arrows source="diamond" target="none"/></y:PolyLineEdge></data></edge></graph>
   <data key="d6">
     <y:Resources/>
   </data>

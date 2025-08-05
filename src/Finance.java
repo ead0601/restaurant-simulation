@@ -1,11 +1,8 @@
-public class Finance implements SimProcess {
-    private int tickCounter = 0;
-    private int nextTickCounter = 0;
+public class Finance extends SimEntity {
+    private double netRevenue;
 
     @Override
-    public boolean evaluate() { nextTickCounter = tickCounter + 1; return true; }
-    @Override
-    public void commit() { tickCounter = nextTickCounter; if (tickCounter % 1000 == 0) System.out.println("[Finance] Tick: " + tickCounter); }
-    @Override
-    public String[][] getState() { return new String[][] { { "tickCounter", String.valueOf(tickCounter) } }; }
+    public String[][] getState() {
+        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"netRevenue", String.valueOf(netRevenue)} };
+    }
 }

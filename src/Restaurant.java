@@ -1,11 +1,8 @@
-public class Restaurant implements SimProcess {
-    private int tickCounter = 0;
-    private int nextTickCounter = 0;
+public class Restaurant extends SimEntity {
+    private double revenue;
 
     @Override
-    public boolean evaluate() { nextTickCounter = tickCounter + 1; return true; }
-    @Override
-    public void commit() { tickCounter = nextTickCounter; if (tickCounter % 1000 == 0) System.out.println("[Restaurant] Tick: " + tickCounter); }
-    @Override
-    public String[][] getState() { return new String[][] { { "tickCounter", String.valueOf(tickCounter) } }; }
+    public String[][] getState() {
+        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"revenue", String.valueOf(revenue)} };
+    }
 }

@@ -1,11 +1,8 @@
-public class Inventory implements SimProcess {
-    private int tickCounter = 0;
-    private int nextTickCounter = 0;
+public class Inventory extends SimEntity {
+    private int stockLevel;
 
     @Override
-    public boolean evaluate() { nextTickCounter = tickCounter + 1; return true; }
-    @Override
-    public void commit() { tickCounter = nextTickCounter; if (tickCounter % 1000 == 0) System.out.println("[Inventory] Tick: " + tickCounter); }
-    @Override
-    public String[][] getState() { return new String[][] { { "tickCounter", String.valueOf(tickCounter) } }; }
+    public String[][] getState() {
+        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"stockLevel", String.valueOf(stockLevel)} };
+    }
 }

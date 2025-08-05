@@ -1,34 +1,47 @@
-# Restaurant Simulation (Verilog-Style Heartbeat)
+# Java Simulation Kernel Framework
 
-This project is a **Java-based simulation framework** inspired by Verilog/SystemC's event-driven model. It models a restaurant system using a **clock-driven evaluate/commit cycle** (heartbeat) with **waveform-style debugging** for state inspection.
+This project provides a **reusable, general-purpose simulation framework** in Java, inspired by HDL simulators like Verilog/SystemC. 
+It features a heartbeat-driven simulation loop, an integrated console for interactive debugging, GTKWave waveform logging, and single-step tick control.
 
 ---
 
 ## ✨ Features
-- **Verilog-Style Heartbeat**: All simulation objects implement `SimProcess` with `evaluate()`, `commit()`, and `getState()` methods.
-- **Waveform Debugging**: Built-in `WaveformViewer` displays state values per tick (like signal traces).
-- **Minimal Tick Skeleton**: Each object (Restaurant, Cook, Customer, etc.) includes tick counters for easy debugging and waveform validation.
-- **UML-Aligned**: Code structure mirrors the accompanying UML diagram and Object & Method Reference.
-- **VSCode & Makefile Ready**: Supports easy compilation/running inside VSCode or via `make`.
+- **Simulation Kernel (HeartbeatManager)**: Central engine managing evaluate/commit cycles for all entities.
+- **Interactive Console**:
+  - Inspect object state (`show` command).
+  - Modify values at runtime (`set` command).
+  - Single-step or run ticks (`tick` and `run` commands).
+- **Waveform Logging (GTKWave Integration)**:
+  - Export simulation state to `.vcd` files.
+  - Visualize signals and object states over time in GTKWave.
+- **Inheritance Model**:
+  - `SimEntity` base class with built-in tick logic.
+  - All simulation objects inherit from `SimEntity` for consistency.
+- **Single-Step Debugging**:
+  - Advance simulation one tick at a time for fine-grained analysis.
+- **Modular and Reusable**:
+  - Extendable to model restaurants, traffic systems, CPUs, robotics, or any discrete-time system.
 
 ---
 
 ## 📂 Project Structure
 ```
 .
-├── SimProcess.java          # Interface for tick-driven objects
-├── SimulationClock.java     # Simulation clock (drives heartbeat)
-├── HeartbeatManager.java    # Manages evaluate/commit stabilization
-├── WaveformViewer.java      # Debug waveform state display
-├── Restaurant.java          # Example simulation object (tick-driven)
-├── Cook.java                # Additional tick-driven objects...
-├── Customer.java
-├── Server.java
-├── Main.java                # Entry point: demo tick debug + full sim
-├── Makefile                 # Simple build/run/clean workflow
+├── SimProcess.java              # Simulation process interface
+├── SimEntity.java               # Base class for tick-driven entities
+├── SimulationClock.java         # Clock entity with tick tracking
+├── HeartbeatManager.java        # Simulation Kernel (console + waveform logging)
+├── Main.java                    # Entry point
+├── Entities:
+│   ├── Restaurant.java
+│   ├── Cook.java
+│   ├── Customer.java
+│   ├── Server.java
+│   ├── Table.java
+│   ├── ... (other entity classes)
 └── docs/
-    ├── UML.graphml          # UML diagram (yEd format)
-    └── Object_Reference.docx # Object and Method Reference
+    ├── UML.graphml              # UML diagram (yEd format)
+    └── Object_Reference.docx     # Object and method documentation
 ```
 
 ---
@@ -36,65 +49,79 @@ This project is a **Java-based simulation framework** inspired by Verilog/System
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Java JDK 11+ installed.
-- (Optional) [yEd Graph Editor](https://www.yworks.com/products/yed) for UML.
-- GNU Make (if using the provided Makefile).
+- **Java JDK 11+**
+- **GTKWave** (for waveform viewing): [https://gtkwave.sourceforge.net/](https://gtkwave.sourceforge.net/)
 
 ### Build & Run
-1. **Compile all Java files:**
+1. Compile all Java files:
    ```bash
    make
    ```
-2. **Run the simulation:**
+2. Run the simulation kernel:
    ```bash
    make run
    ```
-3. **Clean up compiled files:**
-   ```bash
-   make clean
+3. You'll see the simulation prompt:
    ```
-
-### Running in VSCode
-- Open the project folder in VSCode.
-- Install the "Extension Pack for Java".
-- Press `F5` or click **Run ▶** above `Main.java`.
+   sim>
+   ```
 
 ---
 
-## 🔧 Debug Mode (WaveformViewer)
-The simulation includes a **waveform debug mode** to inspect state per tick:
-```java
-WaveformViewer wf = new WaveformViewer(hb, List.of(clock, restaurant, cook, customer, server));
-wf.runDebug(50);  // runs 50 ticks and prints state
-```
+## 🖥 Console Commands
+- `help` → Show all commands.
+- `list` → List all registered simulation objects.
+- `show <object>` → Display the state of an object.
+- `set <object> <field> <value>` → Modify an object's field at runtime.
+- `tick [N]` → Advance simulation by N ticks (default: 1).
+- `run <N>` → Run simulation for N ticks continuously.
+- `log start <filename>` → Start waveform logging to `<filename>.vcd`.
+- `log stop` → Stop waveform logging.
+- `quit` → Exit the simulation console.
 
-Sample output:
-```
-Time 1: [Clock: tickCounter=1] [Restaurant: tickCounter=1] ...
-Time 2: [Clock: tickCounter=2] [Restaurant: tickCounter=2] ...
-...
-```
+---
+
+## 📊 Waveform Logging (GTKWave Integration)
+1. Start waveform logging from the console:
+   ```
+   sim> log start simulation.vcd
+   sim> run 100
+   sim> log stop
+   ```
+2. Open the generated VCD file in GTKWave:
+   ```bash
+   gtkwave simulation.vcd
+   ```
+3. Analyze tick-by-tick state changes for all objects.
+
+---
+
+## 🔧 Extending the Framework
+- Add new simulation objects by extending `SimEntity` and overriding `getState()`.
+- Register them with the kernel using `hb.registerProcess(...)`.
+- Console and waveform logging automatically include all registered entities.
+
+---
+
+## 🛠 Future Enhancements
+- **Breakpoints & Watchpoints** (e.g., stop when a variable changes).
+- **Event-driven scheduling** for asynchronous events.
+- **State save/load** for checkpointing and rollback.
+- **Conditional triggers** (e.g., auto-log or pause on specific conditions).
 
 ---
 
 ## 📘 Documentation
-- **UML Diagram**: `docs/UML.graphml` (yEd-compatible)
-- **Object Reference**: `docs/Object_Reference.docx`
-
----
-
-## 🛠 Future Plans
-- Expand tick logic to model realistic restaurant workflows.
-- Integrate event-driven scheduling (e.g., customer arrivals).
-- Export waveform traces to CSV for visualization in external tools.
+- **UML Diagram**: `docs/UML.graphml` (open with yEd).
+- **Object Reference**: `docs/Object_Reference.docx` (full attributes & methods).
 
 ---
 
 ## 📄 License
-This project is released under the GPLv3 License. See `LICENSE` for details.
+GPLv3 License.
 
 ---
 
 ## 👤 Author
-- **Your Name Here**  
-  - GitHub: [ead0601](https://github.com/ead0601)
+- Edward Diaz  
+  GitHub: [ead0601](https://github.com/ead0601)

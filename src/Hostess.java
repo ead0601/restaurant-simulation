@@ -1,11 +1,8 @@
-public class Hostess implements SimProcess {
-    private int tickCounter = 0;
-    private int nextTickCounter = 0;
+public class Hostess extends SimEntity {
+    private int guestsQueued;
 
     @Override
-    public boolean evaluate() { nextTickCounter = tickCounter + 1; return true; }
-    @Override
-    public void commit() { tickCounter = nextTickCounter; if (tickCounter % 1000 == 0) System.out.println("[Hostess] Tick: " + tickCounter); }
-    @Override
-    public String[][] getState() { return new String[][] { { "tickCounter", String.valueOf(tickCounter) } }; }
+    public String[][] getState() {
+        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"guestsQueued", String.valueOf(guestsQueued)} };
+    }
 }
