@@ -27,21 +27,28 @@ It features a heartbeat-driven simulation loop, an integrated console for intera
 ## 📂 Project Structure
 ```
 .
-├── SimProcess.java              # Simulation process interface
-├── SimEntity.java               # Base class for tick-driven entities
-├── SimulationClock.java         # Clock entity with tick tracking
-├── HeartbeatManager.java        # Simulation Kernel (console + waveform logging)
-├── Main.java                    # Entry point
-├── Entities:
-│   ├── Restaurant.java
-│   ├── Cook.java
-│   ├── Customer.java
-│   ├── Server.java
-│   ├── Table.java
-│   ├── ... (other entity classes)
-└── docs/
-    ├── UML.graphml              # UML diagram (yEd format)
-    └── Object_Reference.docx     # Object and method documentation
+├── src/                            # Java source files
+│   ├── SimProcess.java
+│   ├── SimEntity.java
+│   ├── SimulationClock.java
+│   ├── HeartbeatManager.java
+│   ├── Main.java
+│   ├── Entities/
+│   │   ├── Restaurant.java
+│   │   ├── Cook.java
+│   │   ├── Customer.java
+│   │   ├── Server.java
+│   │   ├── Table.java
+│   │   └── ... (other entities)
+│
+├── doc/
+│   ├── Object_and_Method_Reference.docx       # UML object/method reference
+│   ├── SimulationKernel_QuickStartGuide.pdf   # Quick start guide for the simulation kernel
+│   ├── UML_template.graphml                   # Original UML template for yEd
+│   ├── yEd_UML.graphml                        # Example UML GraphML output
+│
+├── python/
+│   ├── text_to_uml.py                         # UML generator script (embedded template)
 ```
 
 ---
@@ -111,9 +118,46 @@ It features a heartbeat-driven simulation loop, an integrated console for intera
 
 ---
 
-## 📘 Documentation
-- **UML Diagram**: `docs/UML.graphml` (open with yEd).
-- **Object Reference**: `docs/Object_Reference.docx` (full attributes & methods).
+## 📘 UML GraphML Generator (Python)
+
+A Python-based tool to generate UML diagrams in GraphML format for yEd.
+
+### 🔧 Dependencies
+- Python 3.8+
+- No external libraries (standard library only).
+
+### ▶️ Usage
+Run the generator script from the `python` folder:
+```bash
+cd system-sim/restaurant-simulation/python
+
+python3 text_to_uml.py -i ../doc/UML_objects_connections_19_with_colors.txt -o ../doc/yEd_UML.graphml
+```
+
+### Options:
+- `-i` or `--input`: Text file containing UML objects and connections.
+- `-o` or `--output`: Output `.graphml` file.
+- `--color`: (Optional) Override color for all nodes (hex, e.g. `#FFDD00`).
+
+### 📝 Input File Format
+```
+object: "Object1"
+stereotype: "«Utility»"
+attribute: "id: int"
+method: "run()"
+
+object: "Object2"
+stereotype: "«inherits SimEntity»"
+attribute: "name: str"
+method: "start()"
+
+connection: "Object1" -> "Object2"
+connection: "Object2" -> "Object3"
+```
+
+- Each object block is separated by a blank line.
+- `connection:` statements are listed separately after objects.
+- Connection labels are auto-generated (e.g., `1-2`, `2-3`).
 
 ---
 
