@@ -1,0 +1,39 @@
+Restaurant Simulation Operational Goals
+---------------------------------------
+
+1. Modular Object Design:
+   - Each simulation object (e.g., Server, Table, Inventory, Platter) is its own class.
+   - Objects are discoverable, listable, and modifiable via console and .init files.
+
+2. Declarative Initialization:
+   - All objects are created via init files using commands like:
+     Inventory.Salmon.qty = 20
+     Platter.MacAndCheese.cost = 4.90
+     Server.0.name = Alice
+
+3. Console Control:
+   - list: Hierarchical object exploration (e.g., list Platter.MacAndCheese)
+   - set: Modifies object fields dynamically (e.g., set Inventory.Salmon.cost 3.00)
+   - reset/load: Load init values and reset simulation to time 0
+
+4. Scalable Architecture:
+   - No hardcoded limits on number of servers, tables, stoves, platters, etc.
+   - Add more objects by extending the init file — no Java changes needed.
+
+5. Logging and Triggers:
+   - Each object registers loggable fields and triggers logging when meaningful changes occur.
+   - Logging is handled via SimulationManager’s VCD/event model.
+
+6. Object Structure Access:
+   - SimulationManager holds a map of named objects.
+   - Each object exposes state and field access via `getState()` and `setValue()`.
+
+7. Example Scenario:
+   - Load a setup with 5 servers, 10 tables, 2 stoves, 15 platters.
+   - Dynamically adjust costs or add dishes via console or file.
+
+8. Export Future:
+   - A `store` command will be added to export simulation state back to init format.
+   - Helpful for debugging, saving checkpoints, and state visualization.
+
+This file ensures continuity in new chat sessions.

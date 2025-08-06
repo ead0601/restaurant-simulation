@@ -1,0 +1,11 @@
+Platter.GrilledSalmon.name = Grilled Salmon with Asparagus
+Platter.GrilledSalmon.ingredients = Salmon,Asparagus,Salt,Lemon,OliveOil
+Platter.GrilledSalmon.cookingTime = 12
+Platter.GrilledSalmon.appliance = Stove
+Platter.GrilledSalmon.cost = 9.75
+
+Platter.MacAndCheese.name = Mac and Cheese
+Platter.MacAndCheese.ingredients = Macaroni,CheddarCheese,Milk,Butter
+Platter.MacAndCheese.cookingTime = 7
+Platter.MacAndCheese.appliance = Microwave
+Platter.MacAndCheese.cost = 4.90

@@ -15,4 +15,12 @@ public class Stove extends SimEntity {
     public void triggerLog() {
         SimulationManagerSingleton.getInstance().triggerLog("Stove");
     }
+
+    public void startCooking(Platter p) {
+        System.out.println("Stove started cooking: " + p.getName());
+    }
+
+    public void advanceTime() {
+        System.out.println("Stove advancing time.");
+    }
 }
