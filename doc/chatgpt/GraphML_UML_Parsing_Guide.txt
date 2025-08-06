@@ -1,0 +1,122 @@
+
+# UML GraphML Parsing Guide (yEd UMLClassNode)
+
+This document provides explicit rules for extracting UML object data from a yEd `.graphml` file.
+It captures lessons learned during previous parsing attempts to ensure future accuracy.
+
+---
+## 1. Node Structure Overview
+Each UML class is represented by a `<graphml:node>` element containing a `<y:UMLClassNode>` block.
+Inside this block:
+
+- **Object Name**: Found in the first `<y:NodeLabel>` child.
+- **Stereotype & Constraint**: Attributes of the `<y:UML>` element.
+- **Attributes**: Inside the `<y:AttributeLabel>` child (multiline text).
+- **Methods**: Inside the `<y:MethodLabel>` child (multiline text).
+
+Example structure:
+```xml
+<node id="n0">
+  <data key="d5">
+    <y:UMLClassNode>
+      <y:NodeLabel>1. Restaurant</y:NodeLabel>
+      <y:UML stereotype="«inherits SimEntity»" constraint="{manages operations}">
+        <y:AttributeLabel>
+          - name: String
+          - tables: List<Table>
+        </y:AttributeLabel>
+        <y:MethodLabel>
+          + simulateDay()
+          + decideStaffing()
+        </y:MethodLabel>
+      </y:UML>
+    </y:UMLClassNode>
+  </data>
+</node>
+```
+
+---
+## 2. Parsing Rules
+
+### Rule 1: Extract Object Name
+- Locate `<y:NodeLabel>` inside `<y:UMLClassNode>`.
+- Use its text as the object name.
+
+### Rule 2: Extract Stereotype and Constraint
+- Find `<y:UML>` inside `<y:UMLClassNode>`.
+- Read its attributes:
+  - `stereotype` → value like «inherits SimEntity».
+  - `constraint` → value like {manages operations}.
+
+### Rule 3: Extract Attributes
+- Locate `<y:AttributeLabel>` inside `<y:UML>`.
+- Split text by newlines to list each attribute.
+
+### Rule 4: Extract Methods
+- Locate `<y:MethodLabel>` inside `<y:UML>`.
+- Split text by newlines to list each method.
+
+### Rule 5: Connections
+- Connections (associations, dependencies) are stored in `<graphml:edge>`.
+  - Attributes: `source` and `target` (node IDs).
+  - Optional `<y:EdgeLabel>` gives relationship name.
+- Use a node ID → name map to resolve endpoints.
+
+---
+## 3. Key Lessons Learned
+
+- Do NOT rely on `y:UML` attributes alone: Attributes and Methods are separate nested tags.
+- Constraints and stereotypes are NOT child elements but are attributes of `<y:UML>`.
+- Attributes and Methods use **newline-delimited text** in `<y:AttributeLabel>` and `<y:MethodLabel>`.
+- Object names are in `<y:NodeLabel>` but separate from attributes/methods sections.
+- Connections must be resolved via node ID mapping.
+- Always handle namespaces explicitly:
+  ```python
+  ns = {
+    'graphml': 'http://graphml.graphdrawing.org/xmlns',
+    'y': 'http://www.yworks.com/xml/graphml'
+  }
+  ```
+
+---
+## 4. Parsing Pseudocode
+
+1. For each `<graphml:node>`:
+    - Read `y:NodeLabel` → Object name.
+    - Inside `y:UMLClassNode` → `y:UML`:
+        - Extract `stereotype` & `constraint` attributes.
+        - Read `y:AttributeLabel` → split by lines.
+        - Read `y:MethodLabel` → split by lines.
+2. For each `<graphml:edge>`:
+    - Map `source` & `target` to object names.
+    - Optionally capture `<y:EdgeLabel>` as relation.
+
+---
+## 5. Output Format
+
+Format objects in blocks:
+```
+object: "1. Restaurant"
+stereotype: "«inherits SimEntity»"
+constraint: "{manages operations}"
+attribute: "- name: String"
+attribute: "- tables: List<Table>"
+method: "+ simulateDay()"
+method: "+ decideStaffing()"
+```
+
+Format connections:
+```
+connection: "1. Restaurant" -> "2. Hostess"
+label: "manages"
+```
+
+---
+## 6. Future Use
+
+- Always verify one node's raw XML before coding parsing logic.
+- Check that `<y:AttributeLabel>` and `<y:MethodLabel>` exist.
+- This approach is specific to **yEd UMLClassNode** exports and may differ for other GraphML schemas.
+
+---
+End of Guide.

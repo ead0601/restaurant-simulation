@@ -9,6 +9,7 @@ public class Main {
         Customer customer = new Customer();
         Server server = new Server();
         Table table = new Table();
+        Inventory inventory = new Inventory();
 
         // Register objects
         hb.registerProcess(clock);
@@ -17,8 +18,14 @@ public class Main {
         hb.registerProcess(customer);
         hb.registerProcess(server);
         hb.registerProcess(table);
+        hb.registerProcess(inventory);
 
-        // Start debug console
+        // Preload some sample inventory for testing
+        inventory.addIngredient("Tomato", 10, 0.5);
+        inventory.addIngredient("Cheese", 5, 1.0);
+        inventory.addIngredient("Pasta", 8, 0.8);
+
+        System.out.println("Simulation initialized with sample inventory.");
         hb.startConsole();
     }
 }
