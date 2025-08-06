@@ -1,8 +1,18 @@
-public class Stove extends SimEntity {
-    private int activeBurners;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"activeBurners", String.valueOf(activeBurners)} };
+
+public class Stove extends SimEntity {
+    public Stove() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Stove", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Stove");
     }
 }

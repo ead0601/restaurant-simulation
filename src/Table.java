@@ -1,9 +1,18 @@
-public class Table extends SimEntity {
-    private int capacity;
-    private boolean occupied;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"capacity", String.valueOf(capacity)}, new String[]{"occupied", String.valueOf(occupied)} };
+
+public class Table extends SimEntity {
+    public Table() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Table", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Table");
     }
 }

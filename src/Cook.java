@@ -1,8 +1,18 @@
-public class Cook extends SimEntity {
-    private boolean busy;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"busy", String.valueOf(busy)} };
+
+public class Cook extends SimEntity {
+    public Cook() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Cook", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Cook");
     }
 }

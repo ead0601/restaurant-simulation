@@ -1,8 +1,18 @@
-public class Platter extends SimEntity {
-    private int cookingTime;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"cookingTime", String.valueOf(cookingTime)} };
+
+public class Platter extends SimEntity {
+    public Platter() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Platter", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Platter");
     }
 }

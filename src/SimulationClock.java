@@ -1,32 +1,24 @@
-public class SimulationClock extends SimEntity {
-    private int currentTime;
-    private int tickRate;
+import java.util.*;
+import java.util.function.Supplier;
 
-    public SimulationClock(int tickRate) {
-        this.tickRate = tickRate;
-        this.currentTime = 0;
+
+public class SimulationClock {
+    private int currentTime = 0;
+    private int tickRate = 1;
+
+    public void advanceTime() {
+        currentTime += tickRate;
     }
 
-    public void advanceTime() { currentTime += tickRate; }
-    public int getCurrentTime() { return currentTime; }
-
-    @Override
-    public boolean evaluate() {
-        nextTickCounter = tickCounter + 1;
-        return true;
+    public void scheduleEvent() {
+        // Placeholder for future event scheduling
     }
 
-    @Override
-    public void commit() {
-        tickCounter = nextTickCounter;
-        advanceTime();
+    public int getTime() {
+        return currentTime;
     }
 
-    @Override
-    public String[][] getState() {
-        return new String[][] {
-            {"tickCounter", String.valueOf(tickCounter)},
-            {"currentTime", String.valueOf(currentTime)}
-        };
+    public void reset() {
+        currentTime = 0;
     }
 }

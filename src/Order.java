@@ -1,8 +1,18 @@
-public class Order extends SimEntity {
-    private boolean orderReady;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"orderReady", String.valueOf(orderReady)} };
+
+public class Order extends SimEntity {
+    public Order() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Order", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Order");
     }
 }

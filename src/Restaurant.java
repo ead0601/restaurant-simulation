@@ -1,8 +1,18 @@
-public class Restaurant extends SimEntity {
-    private double revenue;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"revenue", String.valueOf(revenue)} };
+
+public class Restaurant extends SimEntity {
+    public Restaurant() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Restaurant", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Restaurant");
     }
 }

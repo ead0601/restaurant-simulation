@@ -1,8 +1,18 @@
-public class Hostess extends SimEntity {
-    private int guestsQueued;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"guestsQueued", String.valueOf(guestsQueued)} };
+
+public class Hostess extends SimEntity {
+    public Hostess() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Hostess", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Hostess");
     }
 }

@@ -1,8 +1,18 @@
-public class CashRegister extends SimEntity {
-    private double balance;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"balance", String.valueOf(balance)} };
+
+public class CashRegister extends SimEntity {
+    public CashRegister() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("CashRegister", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("CashRegister");
     }
 }

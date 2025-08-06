@@ -1,8 +1,18 @@
-public class ServerTable extends SimEntity {
-    private boolean bell;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"bell", String.valueOf(bell)} };
+
+public class ServerTable extends SimEntity {
+    public ServerTable() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("ServerTable", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("ServerTable");
     }
 }

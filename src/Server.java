@@ -1,8 +1,18 @@
-public class Server extends SimEntity {
-    private int tablesAssigned;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)}, new String[]{"tablesAssigned", String.valueOf(tablesAssigned)} };
+
+public class Server extends SimEntity {
+    public Server() {
+        registerLoggables();
+    }
+
+    public void registerLoggables() {
+        SimulationManager manager = SimulationManagerSingleton.getInstance();
+        manager.registerLoggables("Server", new HashMap<>()); // Add variable suppliers as needed
+    }
+
+    public void triggerLog() {
+        SimulationManagerSingleton.getInstance().triggerLog("Server");
     }
 }

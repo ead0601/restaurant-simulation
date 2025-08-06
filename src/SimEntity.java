@@ -1,20 +1,8 @@
-public abstract class SimEntity implements SimProcess {
-    protected int tickCounter = 0;
-    protected int nextTickCounter = 0;
+import java.util.*;
+import java.util.function.Supplier;
 
-    @Override
-    public boolean evaluate() {
-        nextTickCounter = tickCounter + 1;
-        return true;
-    }
 
-    @Override
-    public void commit() {
-        tickCounter = nextTickCounter;
-    }
-
-    @Override
-    public String[][] getState() {
-        return new String[][] { {"tickCounter", String.valueOf(tickCounter)} };
-    }
+public abstract class SimEntity {
+    public abstract void registerLoggables();
+    public abstract void triggerLog();
 }
