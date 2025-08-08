@@ -1,0 +1,69 @@
+Restaurant Simulation Design Requirements Summary
+This document serves as a persistent reference for ChatGPT and collaborators to understand the final intended architecture and design philosophy of the Restaurant Simulation project.
+✅ Simulation Architecture Overview
+The simulation operates under a tick-driven model with clear, two-phase time progression:
+1. Negative Edge: Objects compute and stage their output state (but do not transmit or receive input).
+2. Positive Edge: Objects read inputs, update internal state, and respond to external changes.
+3. Time advances only after both phases complete.
+The SimulationManager controls:
+- The tick cycle
+- Object registration and management
+- Console interaction and value injection
+- VCD logging coordination
+✅ Object Class Conventions
+All simulation entities inherit from SimEntity. The base class defines:
+
+public abstract class SimEntity {
+    public void tickNegative();
+    public void tickPositive();
+    public String getState(String prefix);
+    public void setValue(String field, String value);
+    public void registerLoggables();
+    public void triggerLog();
+}
+
+✅ Console Commands (Parsed by SimulationManager)
+Core Commands
+- run / step – Start or single-tick the simulation
+- load [filename] – Load an init file of values (store/set commands)
+- reset – Reload the last init file and reset time to 0
+- save [filename] – Save all current object states to a file
+Object Interaction
+- list [object] – List all known objects or internals of an object (e.g., list restaurant, list platter)
+- set [object.field] [value] – Manually set a value
+- store [object] [field] [value] – Used by init files to preload values
+Logging
+- setVCD [filename] – Set VCD output log filename
+- startLogging / stopLogging – Control logging behavior
+✅ Object Responsibilities
+SimulationManager
+- Owns clock and ticks all registered objects
+- Manages console input and command parsing
+- Routes logging and object introspection
+Restaurant
+- Contains Inventory, Platter definitions, Table and Server lists
+- Delegates getSubObject() and getState() to child objects
+Inventory
+- Stores count and cost per item
+- Receives and processes inventory commands
+- Only logs inventory changes
+Platter
+- Each dish with list of ingredients, cost, cooking time, and appliance targets
+- Used for dynamic menu creation
+✅ Tick Model Detail
+- Only objects that need to respond to time (Cook, Server, Customer, etc.) implement meaningful tickNegative()/tickPositive()
+- Objects like Inventory may have no-op tick methods
+- All signal/data changes propagate only on positive edge
+✅ Init File Behavior
+- Uses store commands to assign variables, create list entries, and load data
+- Platters, inventory, and tables can be extended at runtime via init file
+- Init files can reconfigure the simulation completely before it starts
+✅ Logging Strategy
+- Each object registers its loggable variables once via registerLoggables()
+- Logging is triggered by triggerLog()
+- Logging events include: task start/end, inventory use, delivery times, etc.
+✅ Future Additions (Planned)
+- Finance object to calculate revenue and cost
+- Appliance tracking system (e.g., 8 stove tops, 4 ovens, 2 microwaves abstracted as CookingStation)
+- Support for dynamic customer arrival and hostess queuing
+This document should remain synced with code and object definitions. Do not update Java source until all structural edits are finalized and confirmed.

@@ -1,399 +1,673 @@
-object: "1. Restaurant"
-stereotype: "«inherits SimEntity»"
-constraint: "{manages operations}"
-color: "#CCE5FF"
-attribute: "- name: String"
-attribute: "- tables: List<Table>"
-attribute: "- menu: List<Platter>"
-attribute: "- staff: List<Staff>"
-attribute: "- revenue: double"
-attribute: "- avgWalkTime: double"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ simulateDay()"
-method: "+ decideStaffing()"
-method: "+ decideTableAssignments()"
-method: "+ decideInventoryRestock()"
-method: "decideStaffing (uses Probability: RushHourOverloadChance)"
-method: "decideInventoryRestock (uses Probability: IngredientSpoilageRate)"
-method: "+ getGlobals(): GlobalVariables"
-method: "+ getDecisionEngine(): GlobalMethods"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "2. Hostess"
-stereotype: "«inherits SimEntity»"
-constraint: "{assigns tables}"
-color: "#CCE5FF"
-attribute: "- name: String"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ greetCustomer(Customer)"
-method: "+ seatCustomer(Customer, Table)"
-method: "+ decideTableAssignment(Customer)"
-method: "+ releaseTableDecision(Table, Customer)"
-method: "+ decideSeating()"
-method: "+ decideQueueOrder()"
-method: "decideSeating (uses Probability: OptimalTableSelectionProbability)"
-method: "decideQueueOrder (uses Probability: QueueBalkingProbability)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "3. CashRegister"
-stereotype: "«inherits SimEntity»"
-constraint: "{tracks revenue}"
-color: "#CCE5FF"
-attribute: "- totalStoreIncome: double"
-attribute: "- totalTips: double"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ processPayment(Server, Order, double tip)"
-method: "+ recordTip(Server, double tip)"
-method: "+ decidePaymentHandling()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "4. Table"
-stereotype: "«inherits SimEntity»"
-constraint: "{seating location}"
-color: "#CCE5FF"
-attribute: "- id: int"
-attribute: "- capacity: int"
-attribute: "- location: String"
-attribute: "- occupied: boolean"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ assignCustomer(Customer)"
-method: "+ clearTable()"
-method: "+ decideClearTable()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "5. Platter"
-stereotype: "«inherits SimEntity»"
-constraint: "{cookable item}"
-color: "#CCE5FF"
-attribute: "- name: String"
-attribute: "- ingredients: List<Ingredient>"
-attribute: "- cookingTime: int"
-attribute: "- price: double"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ prepare()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "6. Ingredient"
-stereotype: "«inherits SimEntity»"
-constraint: "{perishable goods}"
-color: "#CCE5FF"
-attribute: "- name: String"
-attribute: "- quantity: double"
-attribute: "- costPerUnit: double"
-attribute: "- expiryDate: Date"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "7. Cook"
-stereotype: "«inherits SimEntity»"
-constraint: "{kitchen staff}"
-color: "#CCE5FF"
-attribute: "- name: String"
-attribute: "- skillLevel: int"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ cook(Platter)"
-method: "+ prep(Platter)"
-method: "+ announceOrder(Table)"
-method: "+ decideNextOrder()"
-method: "+ decideCookingPriority()"
-method: "decideNextOrder (uses Probability: PrepTimeVariance)"
-method: "decideCookingPriority (uses Probability: CookingDelayRate)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "8. Server"
-stereotype: "«inherits SimEntity»"
-constraint: "{floor staff}"
-color: "#CCE5FF"
-attribute: "- name: String"
-attribute: "- tablesAssigned: List<Table>"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ serve(Table)"
-method: "+ takeOrder(Customer)"
-method: "+ deliverCheck(Customer)"
-method: "+ returnPayment(CashRegister)"
-method: "+ decideDeliverySequence()"
-method: "+ decideTipHandling()"
-method: "decideDeliverySequence (uses Probability: ServiceDelayVariance)"
-method: "decideTipHandling (uses Probability: TipLikelihood)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "9. ServerTable"
-stereotype: "«inherits SimEntity»"
-constraint: "{pickup counter}"
-color: "#CCE5FF"
-attribute: "- bell: boolean"
-attribute: "- orderQueue: Queue<Order>"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ announceOrder(Order)"
-method: "+ pickUpOrder(Server)"
-method: "+ viewNextOrder()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "10. Order"
-stereotype: "«inherits SimEntity»"
-constraint: "{food request}"
-color: "#CCE5FF"
-attribute: "- platter: Platter"
-attribute: "- table: Table"
-attribute: "- timePlaced: int"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ getTable()"
-method: "+ getPlatter()"
-method: "+ calculateTip(happiness: double)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "11. Customer"
-stereotype: "«inherits SimEntity»"
-constraint: "{dining patron}"
-color: "#CCE5FF"
-attribute: "- groupSize: int"
-attribute: "- patience: int"
-attribute: "- satisfaction: int"
-attribute: "- tablePreference: String"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ requestTable(String)"
-method: "+ order(Platter)"
-method: "+ leave()"
-method: "+ decideExit()"
-method: "+ decideReorder()"
-method: "decideExit (uses Probability: PatienceThreshold)"
-method: "decideReorder (uses Probability: ReorderLikelihood)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "12. Inventory"
-stereotype: "«inherits SimEntity»"
-constraint: "{stock control}"
-color: "#CCE5FF"
-attribute: "- ingredients: List<Ingredient>"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ restock()"
-method: "+ checkStock(Platter)"
-method: "+ decideRestockTiming()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "13. Refrigerator"
-stereotype: "«inherits SimEntity»"
-constraint: "{cold storage}"
-color: "#CCE5FF"
-attribute: "- capacity: double"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ store(Ingredient)"
-method: "+ remove(Ingredient)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "14. Stove"
-stereotype: "«inherits SimEntity»"
-constraint: "{hot line}"
-color: "#CCE5FF"
-attribute: "- slots: int"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ startCooking(Platter)"
-method: "+ finishCooking(Platter)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "15. Finance"
-stereotype: "«inherits SimEntity»"
-constraint: "{tracks profit}"
-color: "#CCE5FF"
-attribute: "- fixedCosts: double"
-attribute: "- laborCosts: double"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ calculateNetRevenue()"
-method: "+ decideExpenseApproval()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "16. SimulationClock"
-stereotype: "«Utility»"
-constraint: "{drives simulation}"
-color: "#CCE5FF"
-attribute: "- currentTime: int"
-attribute: "- tickRate: int"
-method: "+ advanceTime()"
-method: "+ scheduleEvent()"
-method: "+ getTime()"
-method: "+ decideNextEventTrigger()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
-
-object: "19. SimulationManager"
+object:     "19. SimulationManager"
 stereotype: "«Simulation Kernel with Console & Waveform»"
 constraint: "{drives simulation clk}"
-color: "#CCE5FF"
-method: "+ registerLoggables(objectName: String, logMap: Map<String, Supplier<Object>>)"
-method: "+ logObject(objectName: String)"
-method: "+ triggerLog(objectName: String)"
-method: "+ loadInitFile(filename: String)"
-method: "+ resetSimulation()"
-method: "+ saveState(filename: String)"
-method: "+ setVCD(filename: String)"
-method: "+ run(int): void"
-method: "+ stepOnce(): void"
-method: "+ getClock(): SimulationClock"
-method: "+ startConsole(): void"
-method: "+ listObjects(): void"
-method: "+ showObject(String): void"
-method: "+ setValue(String, String, String): void"
-method: "+ startLogging(String): void"
-method: "+ stopLogging(): void"
-method: "+ logTick(int): void"
-method: "+ displayStates(): void"
+color:      "#E0E0E0"
+space:
+attribute:  "- initFileName: String"
+attribute:  "- simObject: Object"                    # Reference to man simulation object (Restaurant)
+attribute:  "- simClkObject: Object"                 # Reference to simulation clock
+attribute:  "- objectMap: Map<String, SimEntity>"    # list of all the object, they self register
+attribute:  "- clock: SimulationClock"               # Current clock count
+attribute:  "- phasetick: SimulationClock"           # Current tick value 0-3
+space:
+space:      # Triming events
+method:     "+ trigger(String)"                      # recieve system log trigger, query objects for loggables
+method:     "+ tick(): int    "                      # 0 = low, 1=posedge, 2=high, 3=negedge
+space:
+space:      # Console process
+method:     "+ startConsole(): void"
+method      "+ processCommand(String)"
+method:     "+ saveState(filename: String)"
+method:     "+ setVCD(filename: String)"
+method:     "+ getLoggables(String, boolean): List"  # Get Static or Dynamic list
+space:
+space:      # Console commands
+method:     "+ log(String): void"                    # Start/stop logging
+method:     "+ reset(void): void"
+method:     "+ run(int): void"
+method:     "+ step(int): void"
+method:     "+ load(filename: String)"               # Parse init file that configures all objects
+method:     "+ list(String): List"                   # Recieve a list from an object and display
+method:     "+ set(String, String): void"            # Set and objects variables
+space:
+space: # Notes:
+space: # Objects are not instantiated until created via 'store' or 'set' command with a 'new' keyword.
+space: # The init file must define objects in hierarchical order (e.g., Restaurant before Inventory).
+space: # This top-down configuration model ensures correct dependencies are respected during initialization.
+space  # Note: we may need trigger() to be thread-safe, e.g., multi threads.
+space: # possible solutiona GlobalSimulationManager with SimulationManager per thread.
+space: # Logging Notes:
+space: # An object calls: SimulationManager.trigger("CashRegister");
+space: # SimulationManager: Looks up "CashRegister" in objectMap
+space: # Calls getLoggableState() (or similar) directly on that object
+space: # Writes the result to VCD/log file
 
-connection: "1. Restaurant" -> "2. Hostess"
-connection: "1. Restaurant" -> "4. Table"
-connection: "1. Restaurant" -> "7. Cook"
-connection: "1. Restaurant" -> "8. Server"
-connection: "1. Restaurant" -> "12. Inventory"
-connection: "1. Restaurant" -> "15. Finance"
-connection: "2. Hostess" -> "11. Customer"
-connection: "2. Hostess" -> "4. Table"
-connection: "2. Hostess" -> "3. CashRegister"
-connection: "4. Table" -> "11. Customer"
-connection: "7. Cook" -> "5. Platter"
-connection: "7. Cook" -> "12. Inventory"
-connection: "7. Cook" -> "13. Refrigerator"
-connection: "7. Cook" -> "14. Stove"
-connection: "7. Cook" -> "9. ServerTable"
-connection: "5. Platter" -> "6. Ingredient"
-connection: "12. Inventory" -> "6. Ingredient"
-connection: "12. Inventory" -> "13. Refrigerator"
-connection: "8. Server" -> "4. Table"
-connection: "8. Server" -> "10. Order"
-connection: "8. Server" -> "3. CashRegister"
-connection: "9. ServerTable" -> "10. Order"
-connection: "9. ServerTable" -> "8. Server"
-connection: "10. Order" -> "4. Table"
-connection: "3. CashRegister" -> "15. Finance"
-connection: "16. SimulationClock" -> "1. Restaurant"
-connection: "16. SimulationClock" -> "7. Cook"
-connection: "16. SimulationClock" -> "8. Server"
-connection: "16. SimulationClock" -> "11. Customer"
-connection: "16. SimulationClock" -> "2. Hostess"
-connection: "19. SimulationManager" -> "1. Restaurant"
-connection: "1. Restaurant" -> "19. SimulationManager"
-
-object: "1. Restaurant"
+object:     "1. Restaurant"
 stereotype: "«inherits SimEntity»"
 constraint: "{manages operations}"
-color: "#CCE5FF"
-attribute: "- name: String"
-attribute: "- tables: List<Table>"
-attribute: "- menu: List<Platter>"
-attribute: "- staff: List<Staff>"
-attribute: "- revenue: double"
-attribute: "- avgWalkTime: double"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ simulateDay()"
-method: "+ decideStaffing()"
-method: "+ decideTableAssignments()"
-method: "+ decideInventoryRestock()"
-method: "decideStaffing (uses Probability: RushHourOverloadChance)"
-method: "decideInventoryRestock (uses Probability: IngredientSpoilageRate)"
-method: "+ getGlobals(): GlobalVariables"
-method: "+ getDecisionEngine(): GlobalMethods"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
+color:      "#CCE5FF"
+space:
+space:      # Local variable
+attribute:  "- seed: int"                            # Random seed value
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- tables: List<Table>"
+attribute:  "- menu: List<Platter>"
+attribute:  "- staff: List<Staff>"
+attribute:  "- revenue: double"                      # Loggable
+attribute:  "- intCount: int"                        # Internal counter
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"       # Source objects
+attribute:  "- outputConnections: List<String>"      # Destination objects
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"                      # Trigger SimulationManager with loggable event
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"                  # SimulationManager calls instantiate, driven by init file command
+method:     "+ getState(): String[][]"               # Return all local variables
+method:     "+ phasetickIn() "                       # In:  Triggered by SimulationManager
+method:     "+ phasetickOut() "                      # Out: Trigger Clock to SimObjects 
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Decision methods
+method:     "+ decideTableAssignments()"
+method:     "+ decideInventoryRestock()"
+method:     "+ decideStaffing (uses Probability: RushHourOverloadChance)"
+method:     "+ decideInventoryRestock (uses Probability: IngredientSpoilageRate)"
+space:
+space:      # SimClk methods
+attribute:  "- currentTime: int"
+attribute:  "- tickRate: int"
+method:     "+ advanceTime()"
+method:     "+ scheduleEvent()"
+method:     "+ getTime()"
+method:     "+ decideNextEventTrigger()"
+method:     "+ getPhase(): int"                      # Returns current phase (0–3)
+method:     "+ getTickCount(): int"                  # Returns how many ticks since simulation start
 
-object: "2. Hostess"
+
+
+object:     "8. Server"
+stereotype: "«inherits SimEntity»"
+constraint: "{floor staff}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"                         # Name of object
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- assignedTables: List<Table>"          # Tables this server is responsible for
+attribute:  "- partTime: boolean"                    # Part-time flag (affects scheduling, cost)
+attribute:  "- wageCost: double"                     # Hourly wage or cost model
+attribute:  "- hoursWorked: double"                  # Tracks shift time
+attribute:  "- maxShiftLength: double"               # Maximum allowed hours
+attribute:  "- minWalkTime: double"                  # Best-case walk time
+attribute:  "- maxWalkTime: double"                  # Worst-case walk time
+attribute:  "- avgWalkTime: double"                  # Dynamically adjusted per fatigue
+attribute:  "- lingerRange: int,int"                 # Random tick count to linger on table
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"       # Source objects
+attribute:  "- outputConnections: List<String>"      # Destination objects
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Behavior
+method:     "+ decideNextOrder(): Order"
+method:     "+ deliverPlatter(Platter)"
+method:     "+ deliverCheck(Customer)"
+method:     "+ updateFatigue(): void"                # Adjust avgWalkTime using fatigue curve
+method:     "+ isOvertime(): boolean"                # True if exceeding shift length
+method:     "+ isPartTime(): boolean"                # Returns true if partTime == true
+method:     "+ decideDeliverySequence (uses Probability: ServiceDelayVariance)"
+method:     "+ decideTipHandling (uses Probability: TipLikelihood)"
+space:
+space:      # Order methods
+method:     "+ serve(Table)"                         # Table assigned to Server, start process
+method:     "+ servTablePickUp()"                    # Called when order is ready at ServingTable
+method:     "+ takeOrder(Customer)"                  # Take platter to table, queue of platters, served at different times
+method:     "+ submitCheck(Customer)"                # Submit total cost of Table
+method:     "+ checkDone(Customer)"                  # Function of customer linger range
+method:     "+ returnPayment(CashRegister)"
+
+object:     "9. ServerTable"
+stereotype: "«inherits SimEntity»"
+constraint: "{pickup counter}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- stagedOrders: Map<Table, Platter>"    # Table → Platter mapping
+attribute:  "- maxCapacity: int"                     # Optional: limit total platters stored
+attribute:  "- orderQueue: Queue<Platter>"           # For bulk FIFO mode (optional)
+attribute:  "- delayRange: int,int"                  # Random ticks to simulate kitchen-server de
+attribute:  "- bell: boolean"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"       # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"      # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ announcePlatter(Platter)"
+method:     "+ viewNextPlatter(): Platter"
+method:     "+ stagePlatter(Platter, Table)"         # Called by cook or kitchen
+method:     "+ pickupPlatter(Table): Platter"        # Called by server
+method:     "+ isPlatterReady(Table): boolean"
+
+object:     "2. Hostess"
 stereotype: "«inherits SimEntity»"
 constraint: "{assigns tables}"
-color: "#CCE5FF"
-attribute: "- name: String"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ greetCustomer(Customer)"
-method: "+ seatCustomer(Customer, Table)"
-method: "+ decideTableAssignment(Customer)"
-method: "+ releaseTableDecision(Table, Customer)"
-method: "+ decideSeating()"
-method: "+ decideQueueOrder()"
-method: "decideSeating (uses Probability: OptimalTableSelectionProbability)"
-method: "decideQueueOrder (uses Probability: QueueBalkingProbability)"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"       # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"      # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ registerLoggables()"
+method:     "+ triggerLog()"
+method:     "+ greetCustomer(Customer)"
+method:     "+ seatCustomer(Customer, Table)"
+method:     "+ decideTableAssignment(Customer)"
+method:     "+ releaseTableDecision(Table, Customer)"
+method:     "+ decideSeating()"
+method:     "+ decideQueueOrder()"
+method:     "+ decideSeating (uses Probability: OptimalTableSelectionProbability)"
+method:     "+ decideQueueOrder (uses Probability: QueueBalkingProbability)"
+method      "+ serverHandoff(Table)"
 
-object: "14. Stove"
+object:     "3. CashRegister"
+stereotype: "«inherits SimEntity»"
+constraint: "{tracks revenue}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- totalStoreIncome: double"
+attribute:  "- totalTips: double"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ processPayment(Server, Order, double tip)"
+method:     "+ recordTip(Server, double tip)"
+method:     "+ decidePaymentHandling()"
+
+object:     "4. Table"
+stereotype: "«inherits SimEntity»"
+constraint: "{seating location}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- id: int"
+attribute:  "- capacity: int"
+attribute:  "- location: String"
+attribute:  "- occupied: boolean"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ assignCustomer(Customer)"
+method:     "+ clearTable()"
+method:     "+ decideClearTable()"
+method:     "+ tableDone()"
+
+object:     "5. Platter"
+stereotype: "«inherits SimEntity»"
+constraint: "{cookable item}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- steps: List<CookingStep>"             # Combined
+space:         # <CookingStep>
+space:         # Ingredient ingredient;
+space:         # int amountOz;
+space:         # int cookingTime;
+space:         # int cookingLocation;  (instant,stove,oven,microwave) 
+attribute:  "- price: double"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ prepare()"
+
+object:     "6. Ingredient"
+stereotype: "«inherits SimEntity»"
+constraint: "{perishable goods}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                    # Reference to SimulationManager
+attribute:  "- quantity: double"
+attribute:  "- costPerUnit: double"
+attribute:  "- expiryDate: int"                       # Days to expire
+attribute:  "- days: int"                             # Number of days left
+attribute:  "- currentTime: int"                      # Current number of secs in simulation
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ getQuantity(): int"
+method:     "+ getCost(): int"
+method:     "+ getExpiry(): int"
+method:     "+ getCurrentTime(): int"
+
+object:     "12. Inventory"
+stereotype: "«inherits SimEntity»"
+constraint: "{stock control}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                    # Reference to SimulationManager
+attribute:  "- ingredients: List<Ingredient>"         # Can have ingedients with same name
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ restock()"
+method:     "+ checkStock(Platter)"
+method:     "+ decideRestockTiming()"
+method:     "+ pullIngredients(Order): List<Ingredient>"
+
+object:     "7. Cook"
+stereotype: "«inherits SimEntity»"
+constraint: "{kitchen staff}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- name: String"
+attribute:  "- skillLevel: int"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ cook(Platter)"
+method:     "+ prep(Platter)"
+method:     "+ announceOrder(Table)"
+method:     "+ decideNextOrder()"
+method:     "+ decideCookingPriority()"
+method:     "+ decideNextOrder (uses Probability: PrepTimeVariance)"
+method:     "+ decideCookingPriority (uses Probability: CookingDelayRate)"
+
+object:     "10. Order"
+stereotype: "«inherits SimEntity»"
+constraint: "{food request}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- platter: Platter"
+attribute:  "- table: Table"
+attribute:  "- timePlaced: int"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ getTable()"
+method:     "+ getPlatter()"
+method:     "+ calculateTip(happiness: double)"
+
+object:     "11. Customer"
+stereotype: "«inherits SimEntity»"
+constraint: "{dining patron}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- groupSize: int"
+attribute:  "- patience: int"
+attribute:  "- satisfaction: int"
+attribute:  "- tablePreference: String"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ requestTable(String)"
+method:     "+ order(Platter)"
+method:     "+ leave()"
+method:     "+ decideExit()"
+method:     "+ decideReorder()"
+method:     "+ decideExit (uses Probability: PatienceThreshold)"
+method:     "+ decideReorder (uses Probability: ReorderLikelihood)"
+
+object:     "13. Refrigerator"
+stereotype: "«inherits SimEntity»"
+constraint: "{cold storage}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- capacity: double"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ store(Ingredient)"
+method:     "+ remove(Ingredient)"
+method:     "+ evaluate(): boolean"
+
+object:     "14. Pantry"
+stereotype: "«inherits SimEntity»"
+constraint: "{cold storage}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                   # Reference to SimulationManager
+attribute:  "- capacity: double"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ store(Ingredient)"
+method:     "+ remove(Ingredient)"
+method:     "+ evaluate(): boolean"
+
+object:     "16. CookingDevice"
 stereotype: "«inherits SimEntity»"
 constraint: "{hot line}"
-color: "#CCE5FF"
-attribute: "- slots: int"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ startCooking(Platter)"
-method: "+ finishCooking(Platter)"
-method: "+ advanceTime()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                    # Reference to SimulationManager
+attribute:  "- device: int"                           # 0=Stove, 1=Oven, 2=Mico
+attribute:  "- slots: int"
+attribute:  "- cookTime: int"                         # Time left in seconds
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ startCooking(Platter)"
+method:     "+ finishCooking(Platter)"
+method:     "+ timeLeft(Platter)"
+method:     "+ advanceTime()"
 
-object: "17. Oven"
+object:     "15. Finance"
 stereotype: "«inherits SimEntity»"
-constraint: "{test appliance}"
-color: "#CCE5FF"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ startCooking(Platter)"
-method: "+ advanceTime()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
+constraint: "{tracks profit}"
+color:      "#CCE5FF"
+space:
+space:      # Local variables
+attribute:  "- name: String"
+attribute:  "- simManager: Object"                    # Reference to SimulationManager
+attribute:  "- fixedCosts: double"
+attribute:  "- laborCosts: double"
+space:
+space:      # Connectivity
+attribute:  "- inputConnections: List<String>"        # Source objects (e.g., Cooks)
+attribute:  "- outputConnections: List<String>"       # Destination objects (e.g., Servers)
+space:
+space:      # SimulationManager methods
+method:     "+ trigger(String)"
+method:     "+ readLoggables(type: LogType): List"   # Read static, dynamic, or delta-dynamic values
+method:     "+ instObj(void): void"
+method:     "+ getState(): String[][]"
+method:     "+ phasetick()"
+space:
+space:      # Event queue interface
+attribute:  "- processQueue: Queue<String>"
+method:     "+ enqueue(String)"
+method:     "+ process(String)"
+space:
+space:      # Serving methods
+method:     "+ calculateNetRevenue()"
+method:     "+ decideExpenseApproval()"
 
-object: "18. Microwave"
-stereotype: "«inherits SimEntity»"
-constraint: "{test appliance}"
-color: "#CCE5FF"
-method: "+ registerLoggables()"
-method: "+ triggerLog()"
-method: "+ startCooking(Platter)"
-method: "+ advanceTime()"
-method: "+ evaluate(): boolean"
-method: "+ commit(): void"
-method: "+ getState(): String[][]"
+space:      # ----------------------------------------------------------------------
+space:      # Connections
+connection: "1. Restaurant" -> "2. Hostess"
+connection: "1. Restaurant" -> "3. CashRegister"
+connection: "1. Restaurant" -> "4. Table"
+connection: "1. Restaurant" -> "5. Platter"
+connection: "1. Restaurant" -> "6. Ingredient"
+connection: "1. Restaurant" -> "7. Cook"
+connection: "1. Restaurant" -> "8. Server"
+connection: "1. Restaurant" -> "9. ServerTable"
+connection: "1. Restaurant" -> "10. Order"
+connection: "1. Restaurant" -> "11. Customer"
+connection: "1. Restaurant" -> "12. Inventory"
+connection: "1. Restaurant" -> "13. Refrigerator"
+connection: "1. Restaurant" -> "14. Pantry"
+connection: "1. Restaurant" -> "16. CookingDevice"
+connection: "1. Restaurant" -> "15. Finance"
+connection: "1. Restaurant" -> "19. SimulationManager"
+connection: "2. Hostess" -> "3. CashRegister"
+connection: "2. Hostess" -> "4. Table"
+connection: "2. Hostess" -> "8. Server"
+connection: "2. Hostess" -> "11. Customer"
+connection: "3. CashRegister" -> "15. Finance"
+connection: "4. Table" -> "2. Hostess"
+connection: "4. Table" -> "11. Customer"
+connection: "5. Platter" -> "6. Ingredient"
+connection: "6. Ingredient" -> "13. Refrigerator" 
+connection: "6. Ingredient" -> "14. Pantry"
+connection: "7. Cook" -> "5. Platter"
+connection: "7. Cook" -> "9. ServerTable"
+connection: "7. Cook" -> "12. Inventory"
+connection: "7. Cook" -> "13. Refrigerator"
+connection: "7. Cook" -> "16. CookingDevice"
+connection: "8. Server" -> "3. CashRegister"
+connection: "8. Server" -> "4. Table"
+connection: "8. Server" -> "10. Order"
+connection: "9. ServerTable" -> "8. Server"
+connection: "9. ServerTable" -> "10. Order"
+connection: "10. Order" -> "4. Table"
+connection: "11. Customer" -> "8. Server"
+connection: "11. Customer" -> "3. CashRegister"
+connection: "12. Inventory" -> "13. Refrigerator"
+connection: "12. Inventory" -> "14. Pantry"
+connection: "13. Refrigerator" -> "6. Ingredient"
+connection: "14. Pantry" -> "6. Ingredient"
+connection: "15. Finance" -> "1. Restaurant"
+connection: "19. SimulationManager" -> "1. Restaurant"
+

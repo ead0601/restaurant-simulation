@@ -120,41 +120,108 @@ COLOR_MAP = {
     "«Simulation Kernel with Console & Waveform»": "#FFD966"
 }
 
+
+def _strip_inline_comment(line: str) -> str:
+    quote = None
+    escaped = False
+    out_chars = []
+    for ch in line:
+        if escaped:
+            out_chars.append(ch)
+            escaped = False
+            continue
+        if ch == '\\':
+            escaped = True
+            out_chars.append(ch)
+            continue
+        if quote:
+            if ch == quote:
+                quote = None
+            out_chars.append(ch)
+            continue
+        else:
+            if ch in ('"', "'"):
+                quote = ch
+                out_chars.append(ch)
+                continue
+            if ch == '#':
+                break  # comment starts here (only when not inside quotes)
+            out_chars.append(ch)
+    return ''.join(out_chars)
+
+
 def parse_text_file(file_path):
+    """Parse UML text with relaxed rules and inline comment stripping."""
+    import re
     objects, connections = [], []
     current = {}
+    space_pattern = re.compile(r'^\s*space\b', re.IGNORECASE)
+
     with open(file_path, 'r') as f:
-        for line in f:
+        for raw in f:
+            # Strip inline comments unless the # is inside quotes
+            line = _strip_inline_comment(raw.rstrip('\n'))
+
+            # Drop spacer lines starting with the token "space"
+            if space_pattern.match(line):
+                continue
+
+            # Trim surrounding whitespace for parsing
             line = line.strip()
+
+            # Blank -> possible object boundary
             if not line:
                 if "name" in current:
                     objects.append(current)
                 current = {}
                 continue
+
             if line.startswith("object:"):
                 current = {"attributes": [], "methods": []}
                 current["name"] = line.split(":", 1)[1].strip().strip('"')
+
             elif line.startswith("stereotype:"):
+                if "attributes" not in current:
+                    current = {"attributes": [], "methods": []}
                 current["stereotype"] = line.split(":", 1)[1].strip().strip('"')
+
             elif line.startswith("constraint:"):
+                if "attributes" not in current:
+                    current = {"attributes": [], "methods": []}
                 current["constraint"] = line.split(":", 1)[1].strip().strip('"')
+
+            elif line.startswith("color:"):
+                if "attributes" not in current:
+                    current = {"attributes": [], "methods": []}
+                current["color"] = line.split(":", 1)[1].strip().strip('"')
+
             elif line.startswith("attribute:"):
+                if "attributes" not in current:
+                    current = {"attributes": [], "methods": []}
                 current["attributes"].append(line.split(":", 1)[1].strip().strip('"'))
+
             elif line.startswith("method:"):
+                if "methods" not in current:
+                    current.setdefault("attributes", [])
+                    current["methods"] = []
                 method_line = line.split(":", 1)[1].strip().strip('"')
-                if current["methods"] and current["methods"][-1].endswith("(uses Probability:"):
-                    current["methods"][-1] += f" {method_line}"
-                else:
-                    current["methods"].append(method_line)
+                current["methods"].append(method_line)
+
             elif line.startswith("connection:"):
                 parts = line.split('"')
-                connections.append({"source": parts[1], "target": parts[3]})
+                if len(parts) >= 4:
+                    connections.append({"source": parts[1], "target": parts[3]})
+
             elif line.startswith("label:"):
                 if connections:
                     connections[-1]["label"] = line.split(":", 1)[1].strip().strip('"')
-        if "name" in current:
-            objects.append(current)
+
+    # Flush the last object if any
+    if "name" in current:
+        objects.append(current)
+
     return objects, connections
+
 
 def generate_graphml(text_file, output_file, override_color=None):
     tree = ET.ElementTree(ET.fromstring(TEMPLATE_GRAPHML))
